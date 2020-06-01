@@ -5,10 +5,22 @@ title 利用者ユースケース図
 actor 利用者
 usecase ログインする
 usecase 登録する
+usecase Googleで登録する
+usecase Twitterで登録する
+usecase Facebookで登録する
 usecase 会議室を検索する
+usecase 会議室を住所で検索する
+usecase 会議室を日付で検索する
 usecase 会議室を予約する
+usecase 料金を支払う
 利用者 -- ログインする
 利用者 -- 登録する
 利用者 -- 会議室を検索する
 利用者 -- 会議室を予約する
+利用者 -- 料金を支払う
+会議室を検索する --> 会議室を日付で検索する : <<invokes>>
+会議室を検索する --> 会議室を住所で検索する : <<invokes>>
+登録する -- Googleで登録する : <<invokes>>
+登録する -- Twitterで登録する : <<invokes>>
+登録する -- Facebookで登録する : <<invokes>>
 @enduml

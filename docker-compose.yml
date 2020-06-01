@@ -38,6 +38,13 @@ services:
     ports:
       - "8092:8080"
     restart: always
+  drawio:
+    image: fjudith/draw.io:13.1.9
+    container_name: "drawio"
+    ports:
+      - "8093:8080"
+      - "18443:8443"
+    restart: always
   web:
     build:
       context: ./web

@@ -1,0 +1,59 @@
+@startuml
+title ER図
+
+Entity 会議室 {
+    +会議室ID(PK): serial not null
+    +会議室名: text not null
+    +収容人数: int
+    +料金単価: int not null
+    +住所: text not null
+    +更新日: timestamp with time zone
+}
+
+Entity 平米 {
+    +会議室ID(FK): int not null
+    +平米: int not null
+    +更新日: timestamp with time zone
+    -PK(会議室ID, 平米)
+}
+会議室 ||--|| 平米
+
+Entity 利用者 {
+    +利用者ID(PK): serial not null
+    +利用者名: text not null
+    +更新日: timestamp with time zone
+}
+
+Entity 予約内容 {
+    +予約内容ID(PK): serial not null
+    +会議室ID(FK): int not null
+    +利用者ID(FK): int not null
+    +予約受付日: datetime not null
+    +貸与期間自: datetime not null
+    +貸与期間至: datetime not null
+    +料金: int not null
+    +更新日: timestamp with time zone
+}
+予約内容 }|--|| 利用者
+予約内容 }|--|| 会議室
+
+Entity プラン名 {
+    +予約内容ID(FK): serial not null
+    +会議室ID(FK): int not null
+    +利用者ID(FK): int not null
+    +プラン名: text not null
+    +更新日: timestamp with time zone
+    -PK(予約内容ID, 会議室ID, 利用者ID, プラン名)
+}
+予約内容 ||--|| プラン名
+
+Entity プラン {
+    +プランID(PK): serial not null
+    +会議室ID(FK): int not null
+    +料金単価: int not null
+    +プラン名: text not null
+    +貸与可能期間自: int not null
+    +貸与可能期間至: int not null
+}
+会議室 ||--|{ プラン
+@enduml
