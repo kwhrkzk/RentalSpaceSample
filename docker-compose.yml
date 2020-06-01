@@ -1,0 +1,62 @@
+version: '3.7'
+volumes:
+  dbdata:
+    name: postgresdb
+services:
+  postgres:
+    build:
+      context: ./postgres
+    container_name: "postgres"
+    tty: true
+    restart: always
+    user: root
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=post
+      - POSTGRES_DB=rentaldb
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+      - ./postgres/initdb:/docker-entrypoint-initdb.d
+  pgadmin4:
+    image: dpage/pgadmin4:4.22
+    container_name: pgadmin4
+    ports:
+      - 8091:80
+    volumes:
+      - ./pgadmin/servers.json:/pgadmin4/servers.json
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=postgres
+      - PGADMIN_DEFAULT_PASSWORD=post
+      - PGADMIN_SERVER_JSON_FILE=/pgadmin4/servers.json
+    restart: always
+    entrypoint: /entrypoint.sh
+  plantuml:
+    image: plantuml/plantuml-server:latest
+    container_name: "plantuml"
+    ports:
+      - "8092:8080"
+    restart: always
+  web:
+    build:
+      context: ./web
+    container_name: "web"
+    volumes:
+      - ./src:/var/www/html
+      - ./web/conf:/root/conf
+      - ./web/log:/root/log
+    tty: true
+    restart: always
+    user: root
+    ports:
+      - "8090:80"
+    environment:
+      - "APACHE_LOG_DIR=/root/log"
+    command: >
+      bash -c 
+      "cp -rf /root/conf/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf &&
+      echo 'ServerName localhost' | tee /etc/apache2/conf-available/fqdn.conf &&
+      a2enconf fqdn &&
+      cp -rf /root/conf/php.ini-development /usr/local/etc/php/php.ini &&
+      /usr/sbin/apachectl -DFOREGROUND"

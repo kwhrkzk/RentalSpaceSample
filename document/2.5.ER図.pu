@@ -1,0 +1,40 @@
+@startuml
+title ER図
+
+Entity 会議室 {
+    +会議室ID(PK): serial not null
+    +会議室名: text not null
+    +収容人数: int
+    +料金単価: int not null
+    +住所: text not null
+    +更新日: timestamp with time zone
+}
+
+Entity 貸与可能期間 {
+    +会議室ID(FK): int not null
+    +貸与可能期間自: int not null
+    +貸与可能期間至: int not null
+    +更新日: timestamp with time zone
+    -PK(会議室ID, 貸与可能期間自, 貸与可能期間至)
+}
+会議室 ||--|{ 貸与可能期間
+
+Entity 利用者 {
+    +利用者ID(PK): serial not null
+    +利用者名: text not null
+    +更新日: timestamp with time zone
+}
+
+Entity 予約内容 {
+    +予約内容ID(PK): serial not null
+    +会議室ID(FK): int not null
+    +利用者ID(FK): int not null
+    +予約受付日: datetime not null
+    +貸与期間自: datetime not null
+    +貸与期間至: datetime not null
+    +料金: int not null
+    +更新日: timestamp with time zone
+}
+予約内容 }|--|| 利用者
+予約内容 }|--|| 会議室
+@enduml
