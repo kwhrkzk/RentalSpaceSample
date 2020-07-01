@@ -3,6 +3,7 @@ left to right direction
 title 利用者ユースケース図
 
 actor 利用者
+rectangle システム境界 {
 usecase ログインする
 usecase 登録する
 usecase Googleで登録する
@@ -13,6 +14,7 @@ usecase 会議室を住所で検索する
 usecase 会議室を日付で検索する
 usecase 会議室を予約する
 usecase 料金を支払う
+}
 利用者 -- ログインする
 利用者 -- 登録する
 利用者 -- 会議室を検索する

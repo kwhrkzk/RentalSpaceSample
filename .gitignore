@@ -1,3 +1,5 @@
 .ionide/**
 src/vendor/**
 web/log/**
+.vscode/**
+a.txt
